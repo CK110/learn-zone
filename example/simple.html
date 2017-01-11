@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Zones Profiling</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../node_modules/zone.js/dist/zone.js"></script>
+    <script src="../node_modules/zone.js/dist/long-stack-trace-zone.js"></script>
+    <script src="../node_modules/timer.js/dist/timer.js"></script>
+</head>
+<body>
+
+<h1>测试zone</h1>
+
+<button id="b1">测试</button>
+
+<script>
+
+
+    function foo() {console.log('foo')}
+    function bar() {console.log('bar')}
+    function baz() {console.log('baz')}
+    function doSomething() {console.log('doSomething')}
+
+    function main() {
+        b1.addEventListener('click', function () {
+            foo();
+            setTimeout(doSomething, 2000);
+            bar();
+            baz();
+        });
+
+    }
+
+    var myZoneSpec = {
+        beforeTask: function () {
+            console.log('Before task');
+        },
+        afterTask: function () {
+            console.log('After task');
+        }
+    };
+
+//    Zone.current.run(main);
+
+    var myZone = Zone.current.fork(myZoneSpec);
+
+    myZone.run(main);
+
+</script>
+
+</body>
+</html>
