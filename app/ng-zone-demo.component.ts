@@ -39,7 +39,10 @@ export class NgZoneDemoComponent {
         this._ngZone.runOutsideAngular(() => {
             this._increaseProgress(() => {
                 // reenter the Angular zone and display done
+                //因为run() ,会返回一个onTurnDone，从而脏检测，发现progress 变了，最终更新到dom
                 this._ngZone.run(() => { console.log('Outside Done!') });
+
+                //如果没有run（），是不会进行脏检测，程序结束后，process不会变成100，*ngIf="progress >= 100" 无效
                 // () => console.log('Inside Done!')
 
             });
